@@ -15,7 +15,6 @@ protocol BaseViewModelProtocol {
 class BaseViewModel<R: Router>: BaseViewModelProtocol {
 
     let router: R
-    let activityIndicator = UIActivityIndicatorView(style: .large)
     
     init(router: R) {
         self.router = router

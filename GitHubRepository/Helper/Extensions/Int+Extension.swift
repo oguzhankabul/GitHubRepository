@@ -10,6 +10,6 @@ import Foundation
 extension Int {
     
     func toString() -> String {
-        return String(format: "%.1f",self)
+        return String(self)
     }
 }

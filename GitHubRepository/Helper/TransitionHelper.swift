@@ -25,7 +25,7 @@ class PushTransition: NSObject {
     
     var animator: Animator?
     var isAnimated: Bool = true
-    var completionHandler: (() -> Void)?
+    var completionHandler: VoidClosure?
     weak var viewController: UIViewController?
     
     init(animator: Animator? = nil, isAnimated: Bool = true) {

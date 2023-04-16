@@ -24,15 +24,36 @@ class BaseViewController<V: BaseViewModelProtocol>: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        navigationController?.navigationBar.tintColor = .label //asdsafsd
+        
+        view.backgroundColor = .primarySystemBackground
+        
+        setNavigationAppearance()
         setupViews()
         setupLayouts()
     }
     
     deinit {
         debugPrint("deinit: \(self)")
+    }
+    
+    private func setNavigationAppearance() {
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.hidesSearchBarWhenScrolling = true
+        
+        if #available(iOS 13.0, *) {
+            let navBarAppearance = UINavigationBarAppearance()
+            navBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            navBarAppearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            navBarAppearance.backgroundColor = .primarySystemBackground
+            navigationController?.navigationBar.standardAppearance = navBarAppearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        } else {
+            navigationController?.navigationBar.barTintColor = .primarySystemBackground
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        }
     }
     
     // MARK: - SetupViews

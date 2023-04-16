@@ -20,9 +20,7 @@ final class AppRoute {
         let vm = RepositoryListViewModel(router: router)
         let vc = RepositoryListViewController(viewModel: vm)
         router.viewController = vc
-        vc.title = "deneme"
         let navigationController = UINavigationController(rootViewController: vc)
-        navigationController.navigationBar.prefersLargeTitles = true
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }

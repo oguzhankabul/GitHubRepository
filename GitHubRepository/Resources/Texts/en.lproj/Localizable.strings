@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  GitHubRepository
+
+  Created by Oğuzhan Kabul on 15.04.2023.
+  
+*/
+
+"repositories_title" = "Repositories";
+"no_name_title" = "Name not found";
+"no_login_title" = "Login not found";
+"no_description_title" = "Repository contains no description";
+"no_date_title" = "Date not found";
+"no_star_title" = "Star count not found";
+"no_language_title" = "Language not found";
+"no_forks_title" = "Forks not found";
+"open_in_github_title" = "Open in Github";
+"delete_button_title" = "Delete";

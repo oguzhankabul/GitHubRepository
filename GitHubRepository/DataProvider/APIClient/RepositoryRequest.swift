@@ -36,7 +36,9 @@ final class RepositoryRequest {
             URLQueryItem(name: "per_page", value: perPage),
             URLQueryItem(name: "page", value: page)
         ]
-        if searchText != nil && searchText != "" {
+        if searchText == nil && searchText == "" {
+            queryParameters[0] = URLQueryItem(name: "q", value: "\(created)")
+        } else if searchText != nil{
             queryParameters[0] = URLQueryItem(name: "q", value: "\(searchText!)+\(created)")
         }
         self.queryParameters = queryParameters
