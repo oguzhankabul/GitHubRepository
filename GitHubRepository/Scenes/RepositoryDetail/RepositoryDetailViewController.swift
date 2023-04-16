@@ -9,6 +9,12 @@ import UIKit
 
 final class RepositoryDetailViewController: BaseViewController<RepositoryDetailViewModel> {
     
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -19,12 +25,6 @@ final class RepositoryDetailViewController: BaseViewController<RepositoryDetailV
         scrollView.alwaysBounceVertical = true
         scrollView.backgroundColor = .white
         return scrollView
-    }()
-    
-    private let contentView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
     }()
     
     private let descriptionLabel: UILabel = {
@@ -79,7 +79,7 @@ final class RepositoryDetailViewController: BaseViewController<RepositoryDetailV
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.viewDidLoad()
-        navigationItem.title = viewModel.getTitle()
+        setNavigationItems()
         setData()
     }
     
@@ -124,15 +124,27 @@ final class RepositoryDetailViewController: BaseViewController<RepositoryDetailV
         createDateTagView.set(RepositoryDetailTagViewModel(tagLabel: viewModel.getCreateDate(), image: .icTimer))
     }
     
+    // MARK: - Helper
+    
     @objc private func githubButtonTapped() {
         if let url = URL(string: viewModel.getGithubUrl()) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     
+    @objc func deleteButtonTapped() {
+        let alertController = UIAlertController(title: L10n.are_you_sure_title, message: nil, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: L10n.delete_button_title, style: .destructive) { _ in
+            self.viewModel.back()
+           }
+        let cancelAction = UIAlertAction(title: L10n.cancel_button_title, style: .cancel, handler: nil)
+           alertController.addAction(okAction)
+           alertController.addAction(cancelAction)
+           present(alertController, animated: true, completion: nil)
+    }
+    
     private func setStackViewVerticalStatus() {
         let isPortrait = traitCollection.verticalSizeClass == .compact
-        
         if isPortrait {
             firstCoupleStackView.axis = .horizontal
             secondCoupleStackView.axis = .horizontal
@@ -140,5 +152,11 @@ final class RepositoryDetailViewController: BaseViewController<RepositoryDetailV
             firstCoupleStackView.axis = .vertical
             secondCoupleStackView.axis = .vertical
         }
+    }
+    
+    private func setNavigationItems() {
+        navigationItem.title = viewModel.getTitle()
+        let deleteButton = UIBarButtonItem(title: L10n.delete_button_title, style: .plain, target: self, action: #selector(deleteButtonTapped))
+        navigationItem.rightBarButtonItem = deleteButton
     }
 }

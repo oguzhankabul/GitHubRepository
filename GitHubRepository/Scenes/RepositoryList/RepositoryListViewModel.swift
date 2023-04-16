@@ -9,9 +9,6 @@ import Foundation
 
 final class RepositoryListViewModel: BaseViewModel<RepositoryListRouter> {
     
-    private var repositoryTableViewCellModelList: [RepositoryTableViewCellModel] = []
-    private var repositoryUIModelList: [RepositoryUIModel] = []
-    
     var nextRepositoryPage: Int = 1
     var reloadData: VoidClosure = { }
     var isLoading = false
@@ -23,7 +20,6 @@ final class RepositoryListViewModel: BaseViewModel<RepositoryListRouter> {
         fetchRepositoryList()
     }
 }
-
 
 // MARK: - Request
 extension RepositoryListViewModel {
@@ -37,7 +33,6 @@ extension RepositoryListViewModel {
             switch result {
             case .success(let data):
                 let uIModel = RepositoriesUIModel(repositoryList: data)
-                self.setRepositoryTableViewCellModelList(uIModel: uIModel)
                 self.setRepositoryUIModelList(uIModel: uIModel)
                 DispatchQueue.main.async {
                     self.reloadData()
@@ -45,7 +40,7 @@ extension RepositoryListViewModel {
                         completion()
                     }
                 }
-                if (data.totalCount == self.repositoryUIModelList.count) && self.isLoading {
+                if (data.totalCount == RepositoryCacheManager.shared.getRepositoryUIModelListCount()) && self.isLoading {
                     self.shouldShowLoadMoreIndicator = false
                     self.isLoading = false
                 } else {
@@ -62,29 +57,42 @@ extension RepositoryListViewModel {
 
 // MARK: - Helper
 extension RepositoryListViewModel {
-    private func setRepositoryTableViewCellModelList(uIModel: RepositoriesUIModel) {
-        uIModel.repositoryList?.forEach({ repositoryUiModel in
-            repositoryTableViewCellModelList.append(RepositoryTableViewCellModel(imageUrl: repositoryUiModel.owner.avatarURL, title: repositoryUiModel.name, name: repositoryUiModel.owner.login, description: repositoryUiModel.description))
-        })
-    }
     
     private func setRepositoryUIModelList(uIModel: RepositoriesUIModel) {
         uIModel.repositoryList?.forEach({ repositoryUiModel in
-            repositoryUIModelList.append(repositoryUiModel)
+            RepositoryCacheManager.shared.appendRepositoryUIModelList(uiModel: repositoryUiModel)
+        })
+        
+        uIModel.repositoryList?.forEach({ repositoryUiModel in
+            if !repositoryUiModel.isDeleted {
+                RepositoryCacheManager.shared.appendShowingRepositoryUIModelList(uiModel: repositoryUiModel)
+            }
         })
     }
     
     func getNumberOfRowsInSection() -> Int {
-        return repositoryTableViewCellModelList.count
+        return RepositoryCacheManager.shared.getshowingRepositoryUIModelList().count
     }
     
     func getCellModel(indexPath: IndexPath) -> RepositoryTableViewCellModel {
-        return repositoryTableViewCellModelList[indexPath.row]
+        let relatedRepositoryUIModel = RepositoryCacheManager.shared.getshowingRepositoryUIModelList()[indexPath.row]
+        return RepositoryTableViewCellModel(imageUrl: relatedRepositoryUIModel.owner.avatarURL,
+                                            title: relatedRepositoryUIModel.name,
+                                            name: relatedRepositoryUIModel.owner.login,
+                                            description: relatedRepositoryUIModel.description,
+                                            isVisited: relatedRepositoryUIModel.isVisited)
     }
     
     func emptyingLists() {
-        repositoryTableViewCellModelList = []
-        repositoryUIModelList = []
+        RepositoryCacheManager.shared.setEmptyLists()
+    }
+    
+    func deletedSelectedRepository(htmlUrl: String) {
+        RepositoryCacheManager.shared.deleteRepository(htmlUrl)
+    }
+    
+    func visitedSelectedRepository(index: Int) {
+        RepositoryCacheManager.shared.visiteRepository(index)
     }
 }
 
@@ -92,6 +100,6 @@ extension RepositoryListViewModel {
 extension RepositoryListViewModel {
     
     func pushRepositoryDetail(indexPath: IndexPath) {
-        router.pushRepositoryDetail(repository: repositoryUIModelList[indexPath.row])
+        router.pushRepositoryDetail(repository: RepositoryCacheManager.shared.getshowingRepositoryUIModelList()[indexPath.row])
     }
 }

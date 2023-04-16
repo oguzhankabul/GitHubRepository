@@ -13,6 +13,7 @@ final class RepositoryTableViewCellModel {
     public var title: String
     public var name: String
     public var description: String
+    public var isVisited: Bool
     
     func loadImage(completion: @escaping (UIImage?) -> Void) {
         if let url = URL(string: imageUrl) {
@@ -23,10 +24,11 @@ final class RepositoryTableViewCellModel {
     
     }
     
-    public init(imageUrl: String, title: String, name: String, description: String) {
+    public init(imageUrl: String, title: String, name: String, description: String, isVisited: Bool) {
         self.imageUrl = imageUrl
         self.title = title
         self.name = name
         self.description = description
+        self.isVisited = isVisited
     }
 }

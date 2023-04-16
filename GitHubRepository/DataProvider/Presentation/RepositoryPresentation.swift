@@ -38,7 +38,9 @@ struct RepositoriesUIModel {
                                      createdAt: showingDateValue,
                                      stargazersCount: showingStarsValue,
                                      language: item.language ?? L10n.no_language_title,
-                                     forks: showingForksValue)
+                                     forks: showingForksValue,
+                                     isDeleted: RepositoryCacheManager.shared.isDeleted(item.htmlUrl ?? ""),
+                                     isVisited: RepositoryCacheManager.shared.isVisited(item.htmlUrl ?? ""))
         })
     }
 }
@@ -53,6 +55,8 @@ struct RepositoryUIModel: Codable {
     let stargazersCount: String
     let language: String
     let forks: String
+    var isDeleted: Bool
+    var isVisited: Bool
 }
 
 // MARK: - Owner

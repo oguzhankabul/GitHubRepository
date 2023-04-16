@@ -82,7 +82,7 @@ final class RepositoryTableViewCell: BaseTableViewCell {
         titleLabel.text = cellModel.title
         nameLabel.text = cellModel.name
         descriptionLabel.text = cellModel.description
-        
+        contentView.backgroundColor = cellModel.isVisited ? .lightGray.withAlphaComponent(0.5) : .clear
         cellModel.loadImage { [weak self] image in
             guard let self = self else { return }
             DispatchQueue.main.async {

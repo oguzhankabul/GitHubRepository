@@ -38,4 +38,7 @@ public extension L10n {
     static let no_forks_title = get("no_forks_title")
     static let open_in_github_title = get("open_in_github_title")
     static let delete_button_title = get("delete_button_title")
+    static let are_you_sure_title = get("are_you_sure_title")
+    static let ok_button_title = get("ok_button_title")
+    static let cancel_button_title = get("cancel_button_title")
 }

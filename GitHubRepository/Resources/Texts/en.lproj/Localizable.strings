@@ -16,3 +16,6 @@
 "no_forks_title" = "Forks not found";
 "open_in_github_title" = "Open in Github";
 "delete_button_title" = "Delete";
+"are_you_sure_title" = "You will never see the repository again. Are you sure?";
+"ok_button_title" = "OK";
+"cancel_button_title" = "Cancel";

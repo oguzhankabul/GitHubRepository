@@ -25,6 +25,28 @@ class Router: RouterProtocol {
         transition.open(viewController)
     }
     
+    func close(animated: Bool = true, completion: VoidClosure? = nil) {
+        guard let openTransition = openTransition else {
+            assertionFailure("You should specify an open transition in order to close a module.")
+            return
+        }
+        guard let viewController = viewController else {
+            assertionFailure("Nothing to close.")
+            return
+        }
+        if let openModalTransition = openTransition as? ModalTransition {
+            openModalTransition.isAnimated = animated
+            openModalTransition.completionHandler = completion
+        }
+        
+        if let openPushTransition = openTransition as? PushTransition {
+            openPushTransition.isAnimated = animated
+            openPushTransition.completionHandler = completion
+        }
+        
+        openTransition.close(viewController)
+    }
+    
     deinit {
         debugPrint("deinit: \(self)")
     }

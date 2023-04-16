@@ -42,6 +42,11 @@ class RepositoryListViewController: BaseViewController<RepositoryListViewModel> 
         configureSearchBar()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        repositoryTableView.reloadData()
+    }
+    
     override func setupViews() {
         super.setupViews()
         view.addSubviews([repositoryTableView, spinner])
@@ -59,6 +64,7 @@ class RepositoryListViewController: BaseViewController<RepositoryListViewModel> 
 extension RepositoryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.visitedSelectedRepository(index: indexPath.row)
         viewModel.pushRepositoryDetail(indexPath: indexPath)
     }
 }

@@ -20,6 +20,11 @@ final class RepositoryDetailViewModel: BaseViewModel<RepositoryDetailRouter> {
         super.viewDidLoad()
     }
     
+    func back() {
+        RepositoryCacheManager.shared.deleteRepository(repository.htmlURL)
+        router.close(animated: true)
+    }
+    
     func getTitle() -> String {
         return repository.name
     }
